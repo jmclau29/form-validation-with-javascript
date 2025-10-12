@@ -1,0 +1,86 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+#root, #__next {
+  isolation: isolate;
+}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+body {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+    font-size: 1.2rem;
+    margin: 1rem;
+    margin-left: 2rem;
+}
+
+form > * {
+    margin: 0.3rem;
+}
+
+label {
+    margin-top: 1rem;
+}
+
+input {
+    margin-top: 0.5rem;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+/* error handling */
+.error.active {
+    color: red;
+}
+
+input.error {
+    border: 2px solid red;
+    border-radius: 5px;
+    background-color: rgba(250, 128, 114, 0.336);
+}
