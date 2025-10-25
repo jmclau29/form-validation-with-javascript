@@ -11,26 +11,43 @@ email.addEventListener('input', () => {
     }
 })
 
-let countries = document.getElementById('countries')
-let postalcode = document.getElementById('postalcode');
-let postalcodeError = document.getElementById('postalcodeError');
+const countrySelect = document.getElementById("countries");
+const postalCodeField = document.getElementById("postalcode");
+const postalcodeError = document.getElementById("postalcodeError");
 
-let usCode = "^\\b\\d{5}\\b(?:[- ]{1}\\d{4})?$";
-let ukCode = "^[A-Z]{1,2}[0-9R][0-9A-Z]?\\s*[0-9][A-Z-[CIKMOV]]{2}";
-let canCode = "^(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\d(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\s{0,1}\\d(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\d$"
-
-postalcode.addEventListener('input', () => {
-    if (countries.value === "usa") {
-        if (usCode === postalcode.value) {
-            postalcode.className = "";
-            postalcodeError.textContent = "";
-            postalcodeError.className = "error";
-        } else {
-            showError();
-        }
+function checkPostalCode() {
+    const constraints = {
+        usa: [
+            "^\\b\\d{5}\\b(?:[- ]{1}\\d{4})?$",
+            "US Postal codes must have 5 numbers.",
+        ],
+        canada: [
+            "^(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\d(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\s{0,1}\\d(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\d$",
+            "Canadian postal codes are crazy.",
+        ],
+        uk: [
+            "^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) [0-9][A-Za-z]{2})$",
+            "UK Postcodes must be like this.",
+        ],
     }
-})
 
+    const country = countrySelect.value;
+
+
+    const constraint = new RegExp(constraints[country][0], "");
+    console.log(constraint);
+
+    if (constraint.test(postalCodeField.value)) {
+        postalCodeField.className = "";
+        postalcodeError.textContent = "";
+        postalcodeError.className = "error";
+    } else {
+        showError();
+    }
+}
+
+countrySelect.addEventListener("change", checkPostalCode);
+postalCodeField.addEventListener("input", checkPostalCode);
 
 function showError() {
     if (email.validity.typeMismatch) {
@@ -39,22 +56,19 @@ function showError() {
     email.className = "error";
     emailError.className = "error active";
 
-    if (countries.value === "usa") {
-        if (postalcode.value != usCode) {
-            postalcodeError.textContent = "Please enter a valid US ZIP code!";
+    if (postalCodeField.validity.typeMismatch) {
+        switch (countrySelect.value) {
+            case us:
+                postalcodeError.textContent = "US Postal codes must have 5 numbers.";
+                break;
+            case uk:
+                postalcodeError.textContent = "UK Postcodes must be like this.";
+                break;
+            case canada:
+                postalcodeError.textContent = "Canadian postal codes are crazy.";
+                break;
         }
     }
-    if (countries.value === "uk") {
-        if (postalcode.value != ukCode) {
-            postalcodeError.textContent = "Please enter a valid UK postcode!";
-        }
-    }
-    if (countries.value === "canada") {
-        if (postalcode.value != canCode) {
-            postalcodeError.textContent = "Please enter a valid Canadian postal code!";
-        }
-    }
-    postalcode.className = "error";
+    postalCodeField.className = "error";
     postalcodeError.className = "error active";
-    
 }
