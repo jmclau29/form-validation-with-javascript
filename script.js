@@ -33,10 +33,8 @@ function checkPostalCode() {
 
   const country = countrySelect.value;
 
-
   const constraint = new RegExp(constraints[country][0], "");
-  console.log(constraint);
-  console.log(`Validity is ` + constraint.test(postalCodeField.value));
+
   if (constraint.test(postalCodeField.value)) {
     postalCodeField.className = "";
     postalcodeError.textContent = "";
@@ -46,6 +44,15 @@ function checkPostalCode() {
   }
 }
 
+const password = document.getElementById('password');
+const passwordError = document.getElementById('passwordError');
+const passwordConfirm = document.getElementById('passwordConfirm');
+const passwordConfirmError = document.getElementById('passwordConfirmError');
+
+function checkPassword() {
+  if (password.value.validity.valid)
+}
+
 countrySelect.addEventListener("change", checkPostalCode);
 postalCodeField.addEventListener("input", checkPostalCode);
 
@@ -53,11 +60,10 @@ function showError() {
 
   if (email.validity.typeMismatch) {
     emailError.textContent = "Please enter an email address!";
+    email.className = "error";
+    emailError.className = "error active";
   }
-  email.className = "error";
-  emailError.className = "error active";
 
-  console.log(countrySelect.value);
   if (countrySelect.value === "usa") {
     postalcodeError.textContent = "Enter a valid US postal code please."
     postalCodeField.className = "error";
