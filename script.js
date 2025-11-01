@@ -50,7 +50,23 @@ const passwordConfirm = document.getElementById('passwordConfirm');
 const passwordConfirmError = document.getElementById('passwordConfirmError');
 
 function checkPassword() {
-  if (password.value.validity.valid)
+  if (
+    /[A-Z]/.test(password.value) &&
+    /[a-z]/.test(password.value) &&
+    /[0-9]/.test(password.value) &&
+    /[^A-Za-z0-9]/.test(password.value) &&
+    password.value.length > 4
+  ) {
+    password.className = "";
+    passwordError.textContent = "";
+    passwordError.className = "error";
+  }
+
+  if (password.value === passwordConfirm.value) {
+    passwordConfirm.className = "";
+    passwordConfirmError.textContent = "";
+    passwordConfirmError.className = "error";
+  }
 }
 
 countrySelect.addEventListener("change", checkPostalCode);
