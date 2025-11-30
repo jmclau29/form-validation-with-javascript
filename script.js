@@ -46,20 +46,30 @@ function checkPostalCode() {
 
 const password = document.getElementById('password');
 const passwordError = document.getElementById('passwordError');
+
+const uppercaseError = document.getElementById('uppercase');
+const lowercaseError = document.getElementById('lowercase');
+const numberError = document.getElementById('number');
+const specialError = document.getElementById('special');
+
 const passwordConfirm = document.getElementById('passwordConfirm');
 const passwordConfirmError = document.getElementById('passwordConfirmError');
 
+let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,15}$/;
+
+
 function checkPassword() {
-  if (
-    /[A-Z]/.test(password.value) &&
-    /[a-z]/.test(password.value) &&
-    /[0-9]/.test(password.value) &&
-    /[^A-Za-z0-9]/.test(password.value) &&
-    password.value.length > 4
-  ) {
+  console.log(password.value);
+
+  if (regex.test(password.value) === true) {
+    console.log("true");
     password.className = "";
-    passwordError.textContent = "";
-    passwordError.className = "error";
+    uppercaseError.className = "error";
+    lowercaseError.className = "error";
+    numberError.className = "error";
+    specialError.className = "error";
+  } else {
+    showError();
   }
 
   if (password.value === passwordConfirm.value) {
@@ -68,6 +78,8 @@ function checkPassword() {
     passwordConfirmError.className = "error";
   }
 }
+
+password.addEventListener('input', checkPassword);
 
 countrySelect.addEventListener("change", checkPostalCode);
 postalCodeField.addEventListener("input", checkPostalCode);
@@ -93,4 +105,26 @@ function showError() {
     postalCodeField.className = "error";
     postalcodeError.className = "error active";
   }
+
+  if (!/[A-Z]/.test(password.value)) {
+    password.className = "error";
+    uppercaseError.className = "error active";
+    console.log("Needs an uppercase!");
+  }
+  if (!/[a-z]/.test(password.value)) {
+    password.className = "error";
+    lowercaseError.className = "error active";
+    console.log("Needs a lowercase!");
+  }
+  if (!/[0-9]/.test(password.value)) {
+    password.className = "error";
+    numberError.className = "error active";
+    console.log("Needs a number!");
+  }
+  if (!/[^A-Za-z0-9]/.test(password.value)) {
+    password.className = "error";
+    specialError.className = "error active";
+    console.log("Needs a special character!");
+  }
 }
+

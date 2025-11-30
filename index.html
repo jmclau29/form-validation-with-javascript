@@ -25,10 +25,15 @@
 
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" />
-        <p id="passwordError" class="error"></p>
+        <div id="passwordError" class="error">
+            <p id="uppercase" class="error"> Uppercase letter</p>
+            <p id="lowercase" class="error">Lowercase letter</p>
+            <p id="number" class="error">Number</p>
+            <p id="special" class="error">Special character</p>
+        </div>
 
         <label for="passwordConfirm">Confirm Password:</label>
-        <input type="passwordconfirm" name="passwordConfirm" id="passwordConfirm" />
+        <input type="password" name="passwordConfirm" id="passwordConfirm" />
         <p id="passwordConfirmError" class="error"></p>
 
         <button type="submit" formaction="">Submit</button>
