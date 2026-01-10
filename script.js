@@ -47,39 +47,45 @@ function checkPostalCode() {
 const password = document.getElementById('password');
 const passwordError = document.getElementById('passwordError');
 
-const uppercaseError = document.getElementById('uppercase');
-const lowercaseError = document.getElementById('lowercase');
-const numberError = document.getElementById('number');
-const specialError = document.getElementById('special');
-
 const passwordConfirm = document.getElementById('passwordConfirm');
 const passwordConfirmError = document.getElementById('passwordConfirmError');
 
-let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,15}$/;
 
+function validatePassword() {
+  let password = document.getElementById('password').value;
+  let errors = [];
 
-function checkPassword() {
-  console.log(password.value);
-
-  if (regex.test(password.value) === true) {
-    console.log("true");
-    password.className = "";
-    uppercaseError.className = "error";
-    lowercaseError.className = "error";
-    numberError.className = "error";
-    specialError.className = "error";
-  } else {
-    showError();
+  if (password.length < 8) {
+    errors.push("Your password must be at least 8 characters.");
   }
-
-  if (password.value === passwordConfirm.value) {
-    passwordConfirm.className = "";
-    passwordConfirmError.textContent = "";
-    passwordConfirmError.className = "error";
+  if (password.search(/[A-Z]/) < 0) {
+    errors.push("Your password must contain at least one uppercase letter.");
   }
+  if (password.search(/[a-z]/) < 0) {
+    errors.push("Your password must contain at least one lowercase letter.");
+  }
+  if (password.search(/[0-9]/) < 0) {
+    errors.push("Your password must contain at least one number.");
+  }
+  if (password.search(/[@.#$!%^&*.?]/) < 0) {
+    errors.push("Your password must contain at least one special character.");
+  }
+  if (errors.length > 0) {
+    console.log(errors);
+    for (let i = 0; i < errors.length; i++) {
+      let errorMessage = document.createElement('p');
+      errorMessage.textContent = errors[i].value;
+      passwordError.appendChild(errorMessage);
+    }
+    return false;
+  }
+  while (passwordError.firstChild) {
+    passwordError.removeChild(passwordError.firstChild);
+  }
+  return true;
 }
 
-password.addEventListener('input', checkPassword);
+password.addEventListener('input', validatePassword);
 
 countrySelect.addEventListener("change", checkPostalCode);
 postalCodeField.addEventListener("input", checkPostalCode);
@@ -104,27 +110,6 @@ function showError() {
     postalcodeError.textContent = "Enter a valid Canadian postal code, eh?";
     postalCodeField.className = "error";
     postalcodeError.className = "error active";
-  }
-
-  if (!/[A-Z]/.test(password.value)) {
-    password.className = "error";
-    uppercaseError.className = "error active";
-    console.log("Needs an uppercase!");
-  }
-  if (!/[a-z]/.test(password.value)) {
-    password.className = "error";
-    lowercaseError.className = "error active";
-    console.log("Needs a lowercase!");
-  }
-  if (!/[0-9]/.test(password.value)) {
-    password.className = "error";
-    numberError.className = "error active";
-    console.log("Needs a number!");
-  }
-  if (!/[^A-Za-z0-9]/.test(password.value)) {
-    password.className = "error";
-    specialError.className = "error active";
-    console.log("Needs a special character!");
   }
 }
 
