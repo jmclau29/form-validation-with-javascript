@@ -79,8 +79,9 @@ input {
     color: red;
 }
 
-input.error {
+.passwordError, input.error {
     border: 2px solid red;
     border-radius: 5px;
     background-color: rgba(250, 128, 114, 0.336);
 }
+

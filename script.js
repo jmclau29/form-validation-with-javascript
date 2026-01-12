@@ -71,17 +71,22 @@ function validatePassword() {
     errors.push("Your password must contain at least one special character.");
   }
   if (errors.length > 0) {
-    console.log(errors);
+    while (passwordError.firstChild) {
+      passwordError.removeChild(passwordError.firstChild);
+    }
     for (let i = 0; i < errors.length; i++) {
       let errorMessage = document.createElement('p');
-      errorMessage.textContent = errors[i].value;
+      errorMessage.textContent = errors[i];
       passwordError.appendChild(errorMessage);
     }
+    passwordError.className = "error active";
+    password.className = "error";
     return false;
   }
   while (passwordError.firstChild) {
     passwordError.removeChild(passwordError.firstChild);
   }
+  password.className = "";
   return true;
 }
 
