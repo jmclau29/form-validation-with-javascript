@@ -89,11 +89,14 @@ function validatePassword() {
       errorMessage.textContent = errors[i];
       passwordError.appendChild(errorMessage);
     }
+    passwordError.className = "error active";
+    password.className = "error";
     return false;
   }
   while (passwordError.firstChild) {
     passwordError.removeChild(passwordError.firstChild);
   }
+  password.className = "";
   return true;
 }
 
