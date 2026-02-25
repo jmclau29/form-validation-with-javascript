@@ -15,34 +15,44 @@ const countrySelect = document.getElementById("countries");
 const postalCodeField = document.getElementById("postalcode");
 const postalcodeError = document.getElementById("postalcodeError");
 
-function checkPostalCode() {
-  const constraints = {
-    usa: [
-      "^\\b\\d{5}\\b(?:[- ]{1}\\d{4})?$",
-      "US Postal codes must have 5 numbers.",
-    ],
-    canada: [
-      "^(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\d(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\s{0,1}\\d(?=[^DdFfIiOoQqUu\\d\\s])[A-Za-z]\\d$",
-      "Canadian postal codes are crazy.",
-    ],
-    uk: [
-      "^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) [0-9][A-Za-z]{2})$",
-      "UK Postcodes must be like this.",
-    ],
+function countrySelector() {
+  console.log(countrySelect.value);
+  if (countrySelect.value === "usa") {
+    postalCodeField.setAttribute("pattern", "[0-9]{5}");
   }
+  if (countrySelect.value === "japan") {
+    postalCodeField.setAttribute("pattern", "[0-9]{3}-[0-9]{4}");
+  }
+};
+countrySelector();
+countrySelect.addEventListener('change', countrySelector);
+countrySelect.addEventListener('change', () => {
+  if (!postalCodeField.validity.valueMissing) {
+    if (postalCodeField.validity.valid) {
+      postalcodeError.textContent = "";
+    }
+    else {
+      showError();
+    }
+  }
+})
 
-  const country = countrySelect.value;
 
-  const constraint = new RegExp(constraints[country][0], "");
+function validatePostalCode() {
+  console.log(postalCodeField.value);
 
-  if (constraint.test(postalCodeField.value)) {
-    postalCodeField.className = "";
+  if (postalCodeField.validity.valid) {
     postalcodeError.textContent = "";
-    postalcodeError.className = "error";
-  } else {
+  }
+  else {
     showError();
   }
+
 }
+
+postalCodeField.addEventListener('input', validatePostalCode);
+
+  
 
 const password = document.getElementById('password');
 const passwordError = document.getElementById('passwordError');
@@ -52,29 +62,31 @@ const passwordConfirmError = document.getElementById('passwordConfirmError');
 
 
 function validatePassword() {
-  let password = document.getElementById('password').value;
+  let passwordValue = password.value;
   let errors = [];
 
-  if (password.length < 8) {
+  if (passwordValue.length < 8) {
     errors.push("Your password must be at least 8 characters.");
   }
-  if (password.search(/[A-Z]/) < 0) {
+  if (passwordValue.search(/[A-Z]/) < 0) {
     errors.push("Your password must contain at least one uppercase letter.");
   }
-  if (password.search(/[a-z]/) < 0) {
+  if (passwordValue.search(/[a-z]/) < 0) {
     errors.push("Your password must contain at least one lowercase letter.");
   }
-  if (password.search(/[0-9]/) < 0) {
+  if (passwordValue.search(/[0-9]/) < 0) {
     errors.push("Your password must contain at least one number.");
   }
-  if (password.search(/[@.#$!%^&*.?]/) < 0) {
+  if (passwordValue.search(/[@.#$!%^&*.?]/) < 0) {
     errors.push("Your password must contain at least one special character.");
   }
   if (errors.length > 0) {
-    console.log(errors);
+    while (passwordError.firstChild) {
+      passwordError.removeChild(passwordError.firstChild);
+    }
     for (let i = 0; i < errors.length; i++) {
       let errorMessage = document.createElement('p');
-      errorMessage.textContent = errors[i].value;
+      errorMessage.textContent = errors[i];
       passwordError.appendChild(errorMessage);
     }
     return false;
@@ -85,10 +97,21 @@ function validatePassword() {
   return true;
 }
 
-password.addEventListener('input', validatePassword);
+function confirmPassword() {
+  console.log(passwordConfirm.validity);
+  if (password.value != passwordConfirm.value) {
+    passwordConfirmError.textContent = "Passwords must match!";
+    passwordConfirm.setCustomValidity("Passwords must match!");
+  } else {
+    passwordConfirmError.textContent = "";
+    passwordConfirm.setCustomValidity("");
+  }
 
-countrySelect.addEventListener("change", checkPostalCode);
-postalCodeField.addEventListener("input", checkPostalCode);
+}
+password.addEventListener('input', validatePassword);
+passwordConfirm.addEventListener('input', confirmPassword);
+
+
 
 function showError() {
 
@@ -102,12 +125,8 @@ function showError() {
     postalcodeError.textContent = "Enter a valid US postal code please."
     postalCodeField.className = "error";
     postalcodeError.className = "error active";
-  } else if (countrySelect.value === "uk") {
-    postalcodeError.textContent = "Enter a valid UK postcode, please.";
-    postalCodeField.className = "error";
-    postalcodeError.className = "error active";
-  } else if (countrySelect.value === "canada") {
-    postalcodeError.textContent = "Enter a valid Canadian postal code, eh?";
+  } else if (countrySelect.value === "japan") {
+    postalcodeError.textContent = "Enter a valid Japan postal code, please.";
     postalCodeField.className = "error";
     postalcodeError.className = "error active";
   }
